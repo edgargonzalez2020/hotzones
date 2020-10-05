@@ -1,16 +1,22 @@
 import React, {useContext, useState} from 'react';
-import './login.css';
 import axios from 'axios';
 import { UserContext } from './UserContext';
-const api = axios.create({baseURL: 'http://localhost:3000/api'});
+import { Redirect } from 'react-router-dom';
+import './login.css';
+const api = axios.create({baseURL: 'http://localhost:3001/api'});
+
 function Login() {
 
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
     const [loggedIn, setLoggedIn] = useState(false);
     const {user, setUser} = useContext(UserContext);
+    if(loggedIn) {
+     return(<Redirect to='/home' />);
+	}
     return(
         <div className="login-container">
+            <img className="login-background" src='http://localhost:3001/api/asset/splash.jpeg'/>
             <form className="login-form" onSubmit={(e) => handle_submit(e)}>
                 <input type="text" placeholder="Enter your username" onChange={(e)=> setUserName(e.target.value)}/>
                 <input type="text" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)}/>
@@ -28,7 +34,6 @@ function Login() {
             {
                 setLoggedIn(true);
                 setUser({username: username, loggedIn: loggedIn});
-                console.log(user);
             }
         });
         // CODE FOR CREATE

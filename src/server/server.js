@@ -4,7 +4,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const mkdirp = require('mkdirp');
 const app = express();
-const apiPort = 3000;
+const apiPort = 3001;
 const router = require("./routes/routes");
 const path = require('path');
 const firebase = require('./firebase');
@@ -40,6 +40,11 @@ app.post('/api/create', (req, res) => {
     });
     firebase.database().ref().child('users/' + username).update({email: email, password: password, username: username});
     res.json({sucess: true});
+});
+
+app.get('/api/asset/:name', (req, res) => {
+    let name = req.params.name;
+    res.sendFile(`/assets/${name}`, {root: path.join(__dirname, '../server/public')});
 });
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
 module.exports = app;
